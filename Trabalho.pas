@@ -13,13 +13,15 @@ type aluno_rec = record
   nome	:	string;
   sigla_curso	:	string;
   frequencia	:	real;
+  materias : array[1..5] of string;
+  medias	:	array[1..5] of real;
 end;
 type alunos_array = array[1..20] of aluno_rec;
 
 //Variáveis
 var cursos : cursos_array;
 var alunos : alunos_array;
-q_cursos, i, op : integer;
+q_cursos, q_alunos, i, op : integer;
 rodando :	boolean;
 
 procedure ListarMenu();
@@ -37,7 +39,28 @@ begin
   writeln('-----------------------');
 end;
 
-procedure CadastrarAluno ();
+procedure CadastrarAluno (var lista:alunos_array;lista_cursos:cursos_array);
+var curso_inserido : string;
+i:integer;
+valido : boolean;
+begin
+  valido:= false;
+  q_alunos:=q_alunos+1;
+  lista[i].codigo := q_alunos;
+  writeln('Nome completo do aluno:');
+  readln(lista[q_alunos].nome);
+  writeln('Sigla do curso:');
+  readln(curso_inserido);
+  for i:=1 to q_cursos do
+  //Valida o curso
+  if curso_inserido = lista_cursos[i].sigla then
+  valido := true;
+  lista[q_alunos].sigla_curso := curso_inserido;
+  //Fim da validação
+  writeln('Frequencia total do aluno:');
+  readln(lista[q_alunos].frequencia);
+  
+end;
 
 procedure CadastrarCurso(var lista:cursos_array);
 var trocou : boolean;
