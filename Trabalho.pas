@@ -16,6 +16,7 @@ begin
   writeln('| Escolha sua opção:  |');
   writeln('| 1. Listar cursos.   |');
   writeln('| 2. Cadastrar curso. |');
+  writeln('| 3. Remover curso.   |');
   writeln('| 0. Sair	      |');
   writeln('-----------------------');
 end;
@@ -34,11 +35,11 @@ begin
   //Ordenar
   if q_cursos > 1 then
   begin
-  	i:=q_cursos;
-  	trocou := true;
+    i:=q_cursos;
+    trocou := true;
     while (trocou = true) and (i > 1) do
     begin
-    	trocou := false;
+      trocou := false;
       if lista[i].sigla < lista[i-1].sigla then
       begin
         tmp := lista[i].sigla;
@@ -54,12 +55,30 @@ begin
   end;
 end;
 
+procedure RemoverCurso (var lista:cursos_array);
+var n, i : integer;
+begin
+  if q_cursos = 0 then
+  writeln('Ainda não há cursos listados!')
+  else
+  begin
+    write('Insira o índice a ser removido: ');
+    readln(n);
+    for i:=n to q_cursos do
+    begin
+      lista[i].sigla := lista[i+1].sigla;
+      lista[i].nome := lista[i+1].nome;
+    end;
+    q_cursos := q_cursos-1;
+  end;
+end;
+
 procedure ListarCursos(var lista:cursos_array);
 var i : integer;
 begin
   for i:= 1 to q_cursos do
   begin
-    write('Sigla: ',lista[i].sigla,'   Nome: ',lista[i].nome);
+    write(i,'. Sigla: ',lista[i].sigla,'   Nome: ',lista[i].nome);
     writeln();
   end;
 end;
@@ -75,6 +94,8 @@ Begin
     ListarCursos(cursos)
     else if (op = 2) then
     CadastrarCurso(cursos)
+    else if (op = 3) then
+    RemoverCurso(cursos)
     else if (op = 0) then
     rodando:=false;
   end;
