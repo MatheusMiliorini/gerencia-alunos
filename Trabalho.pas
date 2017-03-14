@@ -1,12 +1,24 @@
 Program trabalho;
 
+//Cursos
 type curso_rec = record
   sigla : string;
   nome	:	string;
 end;
 type cursos_array = array[1..20] of curso_rec;
 
+//Alunos
+type aluno_rec = record
+  codigo : integer;
+  nome	:	string;
+  sigla_curso	:	string;
+  frequencia	:	real;
+end;
+type alunos_array = array[1..20] of aluno_rec;
+
+//Variáveis
 var cursos : cursos_array;
+var alunos : alunos_array;
 q_cursos, i, op : integer;
 rodando :	boolean;
 
@@ -17,9 +29,15 @@ begin
   writeln('| 1. Listar cursos.   |');
   writeln('| 2. Cadastrar curso. |');
   writeln('| 3. Remover curso.   |');
+  writeln('| 4. Listar alunos.   |');
+  writeln('| 5. Cadastrar aluno. |');
+  writeln('| 6. Remover aluno.   |');
+  writeln('|                     |');
   writeln('| 0. Sair	      |');
   writeln('-----------------------');
 end;
+
+procedure CadastrarAluno ();
 
 procedure CadastrarCurso(var lista:cursos_array);
 var trocou : boolean;
