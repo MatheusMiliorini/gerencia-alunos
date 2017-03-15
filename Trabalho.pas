@@ -74,6 +74,23 @@ begin
   end;
 end;
 
+procedure ListarAlunos(lista:alunos_array);
+var i, j : integer;
+begin
+  for i:=1 to q_alunos do
+  begin
+    writeln('Codigo: ',lista[i].codigo);
+    writeln('Nome: ',lista[i].nome);
+    writeln('Curso: ',lista[i].sigla_curso);
+    writeln('Frequencia: ',lista[i].frequencia:2:0);
+    writeln('Matérias:');
+    for j:=1 to 5 do
+    writeln('Nome: ',lista[i].materias[j],'   Média: ',lista[i].medias[j]:2:0);
+    writeln();
+    writeln();
+  end;
+end;
+
 procedure CadastrarCurso(var lista:cursos_array);
 var trocou : boolean;
 tmp : string;
@@ -126,7 +143,7 @@ begin
   end;
 end;
 
-procedure ListarCursos(var lista:cursos_array);
+procedure ListarCursos(lista:cursos_array);
 var i : integer;
 begin
   for i:= 1 to q_cursos do
@@ -149,6 +166,8 @@ Begin
     CadastrarCurso(cursos)
     else if (op = 3) then
     RemoverCurso(cursos)
+    else if (op = 4) then
+    ListarAlunos(alunos)
     else if (op = 5) then
     CadastrarAluno(alunos,cursos)
     else if (op = 0) then
