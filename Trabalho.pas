@@ -46,20 +46,32 @@ valido : boolean;
 begin
   valido:= false;
   q_alunos:=q_alunos+1;
-  lista[i].codigo := q_alunos;
+  lista[q_alunos].codigo := q_alunos;
   writeln('Nome completo do aluno:');
   readln(lista[q_alunos].nome);
   writeln('Sigla do curso:');
-  readln(curso_inserido);
-  for i:=1 to q_cursos do
-  //Valida o curso
-  if curso_inserido = lista_cursos[i].sigla then
-  valido := true;
-  lista[q_alunos].sigla_curso := curso_inserido;
-  //Fim da validação
+  while valido <> true do
+  begin
+    readln(curso_inserido);
+    for i:=1 to q_cursos do
+    //Valida o curso
+    if curso_inserido = lista_cursos[i].sigla then
+    begin
+      valido := true;
+      lista[q_alunos].sigla_curso := curso_inserido;
+    end;
+    if valido = false then
+    writeln('Curso não localizado no banco de dados!');
+    //Fim da validação
+  end;
   writeln('Frequencia total do aluno:');
   readln(lista[q_alunos].frequencia);
-  
+  writeln('Insira as 5 matérias com sua frequencia em seguida:');
+  for i:=1 to 5 do
+  begin
+    readln(lista[q_alunos].materias[i]);
+    readln(lista[q_alunos].medias[i]);
+  end;
 end;
 
 procedure CadastrarCurso(var lista:cursos_array);
@@ -137,6 +149,8 @@ Begin
     CadastrarCurso(cursos)
     else if (op = 3) then
     RemoverCurso(cursos)
+    else if (op = 5) then
+    CadastrarAluno(alunos,cursos)
     else if (op = 0) then
     rodando:=false;
   end;
