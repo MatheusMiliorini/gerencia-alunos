@@ -72,7 +72,9 @@ begin
     writeln('Insira as 5 matérias com sua média em seguida (enter):');
     for i:=1 to 5 do
     begin
+    	write('Matéria: ');
       readln(lista[q_alunos].materias[i]);
+      write('Média: ');
       readln(lista[q_alunos].medias[i]);
     end;
   end
@@ -88,10 +90,10 @@ begin
     writeln('Codigo: ',lista[i].codigo);
     writeln('Nome: ',lista[i].nome);
     writeln('Curso: ',lista[i].sigla_curso);
-    writeln('Frequencia: ',lista[i].frequencia:2:0);
+    writeln('Frequencia: ',lista[i].frequencia:0:2);
     writeln('Matérias:');
     for j:=1 to 5 do
-    writeln('Nome: ',lista[i].materias[j],'   Média: ',lista[i].medias[j]:2:0);
+    writeln('Nome: ',lista[i].materias[j],'   Média: ',lista[i].medias[j]:0:2);
     writeln();
     writeln();
   end;
