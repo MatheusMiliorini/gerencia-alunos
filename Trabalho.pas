@@ -97,37 +97,52 @@ begin
 end;
 
 procedure CadastrarCurso(var lista:cursos_array);
-var trocou : boolean;
-tmp : string;
+var trocou, cadastrar : boolean;
+tmp, curso : string;
 i	:	integer;
 begin
+  cadastrar := true;
   q_cursos := q_cursos+1;
   writeln('Insira a sigla do curso: ');
-  readln(lista[q_cursos].sigla);
-  writeln('Insira o nome do curso: ');
-  readln(lista[q_cursos].nome);
-  
-  //Ordenar
-  if q_cursos > 1 then
+  readln(curso);
+  //Checa se o curso já existe no "banco de dados"
+  for i:=1 to q_cursos do
+  if lista[i].sigla = curso then
   begin
-    i:=q_cursos;
-    trocou := true;
-    while (trocou = true) and (i > 1) do
+    cadastrar := false;
+    writeln('Curso já cadastrado! Operação cancelada...');
+  end;
+  //Fim da checagem
+  if cadastrar = true then
+  begin
+    lista[q_cursos].sigla := curso;
+    writeln('Insira o nome do curso: ');
+    readln(lista[q_cursos].nome);
+    
+    //Ordenar
+    if q_cursos > 1 then
     begin
-      trocou := false;
-      if lista[i].sigla < lista[i-1].sigla then
+      i:=q_cursos;
+      trocou := true;
+      while (trocou = true) and (i > 1) do
       begin
-        tmp := lista[i].sigla;
-        lista[i].sigla := lista[i-1].sigla;
-        lista[i-1].sigla := tmp;
-        tmp := lista[i].nome;
-        lista[i].nome := lista[i-1].nome;
-        lista[i-1].nome := tmp;
-        i:=i-1;
-        trocou := true;
+        trocou := false;
+        if lista[i].sigla < lista[i-1].sigla then
+        begin
+          tmp := lista[i].sigla;
+          lista[i].sigla := lista[i-1].sigla;
+          lista[i-1].sigla := tmp;
+          tmp := lista[i].nome;
+          lista[i].nome := lista[i-1].nome;
+          lista[i-1].nome := tmp;
+          i:=i-1;
+          trocou := true;
+        end;
       end;
     end;
-  end;
+  end
+  else
+  q_cursos := q_cursos-1;
 end;
 
 procedure RemoverCurso (var lista:cursos_array);
