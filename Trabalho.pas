@@ -21,7 +21,7 @@ type alunos_array = array[1..20] of aluno_rec;
 //Variáveis
 var cursos : cursos_array;
 var alunos : alunos_array;
-q_cursos, q_alunos, i, op : integer;
+q_cursos, q_alunos, i, op, v_codigo : integer;
 rodando :	boolean;
 
 procedure ListarMenu();
@@ -48,7 +48,8 @@ begin
   begin
     valido:= false;
     q_alunos:=q_alunos+1;
-    lista[q_alunos].codigo := q_alunos;
+    v_codigo := v_codigo+1;
+    lista[q_alunos].codigo := v_codigo;
     writeln('Nome completo do aluno:');
     readln(lista[q_alunos].nome);
     writeln('Sigla do curso:');
@@ -68,7 +69,7 @@ begin
     end;
     writeln('Frequencia total do aluno:');
     readln(lista[q_alunos].frequencia);
-    writeln('Insira as 5 matérias com sua frequencia em seguida:');
+    writeln('Insira as 5 matérias com sua média em seguida (enter):');
     for i:=1 to 5 do
     begin
       readln(lista[q_alunos].materias[i]);
@@ -93,6 +94,35 @@ begin
     writeln('Nome: ',lista[i].materias[j],'   Média: ',lista[i].medias[j]:2:0);
     writeln();
     writeln();
+  end;
+end;
+
+procedure RemoverAluno(var lista:alunos_array);
+var cod, j : integer;
+begin
+  if q_alunos = 0 then
+  writeln('Lista de alunos vazia, não há o que remover!')
+  else
+  begin
+    writeln('Insira o código do aluno a ser removido:');
+    readln(cod);
+    //Valida se o código não é maior que a quantidade de alunos
+    if cod > q_alunos then
+    writeln('Não há aluno com esse código!') {Termina a validação}
+    else
+    begin
+      for i:=cod to q_alunos do
+      begin
+        lista[i].codigo := lista[i+1].codigo;
+        lista[i].nome := lista[i+1].nome;
+        lista[i].sigla_curso := lista[i+1].sigla_curso;
+        for j:=1 to 5 do
+        lista[i].materias[j] := lista[i+1].materias[j];
+        for j:=1 to 5 do
+        lista[i].medias[j] := lista[i+1].medias[j];
+      end;
+      q_alunos := q_alunos-1;
+    end;
   end;
 end;
 
@@ -142,7 +172,7 @@ begin
     end;
   end
   else
-  q_cursos := q_cursos-1;
+  q_cursos := q_cursos-1; {Isso está aqui para caso a sigla já esteja cadastrada... Gambiarra talvez?}
 end;
 
 procedure RemoverCurso (var lista:cursos_array);
@@ -190,6 +220,8 @@ Begin
     ListarAlunos(alunos)
     else if (op = 5) then
     CadastrarAluno(alunos,cursos)
+    else if (op = 6) then
+    RemoverAluno(alunos)
     else if (op = 0) then
     rodando:=false;
   end;
