@@ -4,6 +4,7 @@ Program trabalho;
 type curso_rec = record
   sigla : string;
   nome	:	string;
+  q_alunos : integer;
 end;
 type cursos_array = array[1..20] of curso_rec;
 
@@ -40,7 +41,7 @@ begin
   writeln('-----------------------');
 end;
 
-procedure CadastrarAluno (var lista:alunos_array;lista_cursos:cursos_array);
+procedure CadastrarAluno (var lista:alunos_array;var lista_cursos:cursos_array);
 var curso_inserido : string;
 i:integer;
 valido : boolean;
@@ -63,6 +64,7 @@ begin
       begin
         valido := true;
         lista[q_alunos].sigla_curso := curso_inserido;
+        lista_cursos[i].q_alunos := lista_cursos[i].q_alunos+1;
       end;
       if valido = false then
       writeln('Curso não localizado no banco de dados!');
@@ -100,12 +102,14 @@ begin
       writeln('Matérias:');
       for j:=1 to lista[i].q_materias do
       writeln('Nome: ',lista[i].materias[j],'   Média: ',lista[i].medias[j]:0:2,'   Frequencia: ',lista[i].frequencia[j]:0:2);
+      writeln();
     end;
   end;
 end;
 
-procedure RemoverAluno(var lista:alunos_array);
+procedure RemoverAluno(var lista:alunos_array; var lista_cursos:cursos_array);
 var cod, j : integer;
+sigla_aluno_deletar : string;
 begin
   if q_alunos = 0 then
   writeln('Lista de alunos vazia, não há o que remover!')
@@ -123,6 +127,10 @@ begin
       //Termina a validação
       else
       begin
+        sigla_aluno_deletar := lista[cod].sigla_curso;
+        for i:=1 to q_cursos do
+        if lista_cursos[i].sigla = sigla_aluno_deletar then
+        lista_cursos[i].q_alunos := lista_cursos[i].q_alunos-1;
         for i:=cod to q_alunos do
         begin
           lista[i].codigo := lista[i+1].codigo;
@@ -201,12 +209,17 @@ begin
     writeln('Índice inválido! Abortando operação...')
     else
     begin
-      for i:=n to q_cursos do
+      if lista[n].q_alunos <> 0 then
+      writeln('Há alunos nesse curso! Remova todos antes de deletá-lo. Abortando operação...')
+      else
       begin
-        lista[i].sigla := lista[i+1].sigla;
-        lista[i].nome := lista[i+1].nome;
+        for i:=n to q_cursos do
+        begin
+          lista[i].sigla := lista[i+1].sigla;
+          lista[i].nome := lista[i+1].nome;
+        end;
+        q_cursos := q_cursos-1;
       end;
-      q_cursos := q_cursos-1;
     end;
   end;
 end;
@@ -239,7 +252,7 @@ Begin
     else if (op = 5) then
     CadastrarAluno(alunos,cursos)
     else if (op = 6) then
-    RemoverAluno(alunos)
+    RemoverAluno(alunos,cursos)
     else if (op = 0) then
     rodando:=false;
     readkey;
