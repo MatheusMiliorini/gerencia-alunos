@@ -87,14 +87,14 @@ begin
   writeln('Ainda não há cursos criados!');
 end;
 
-procedure ListarAlunos(lista:alunos_array);
+procedure ListarAlunos(lista:alunos_array;lista_cursos:cursos_array);
 var i, j : integer;
 begin
   if q_alunos = 0 then
   writeln('Lista de alunos vazia!')
   else
   begin
-    for i:=1 to q_alunos do
+    for i:=1 to q_cursos do
     begin
       writeln('Codigo: ',lista[i].codigo);
       writeln('Nome: ',lista[i].nome);
@@ -248,7 +248,7 @@ Begin
     else if (op = 3) then
     RemoverCurso(cursos)
     else if (op = 4) then
-    ListarAlunos(alunos)
+    ListarAlunos(alunos,cursos)
     else if (op = 5) then
     CadastrarAluno(alunos,cursos)
     else if (op = 6) then
