@@ -132,7 +132,7 @@ begin
         end;
         for j:=i to q_alunos do
         begin
-        	lista[j].q_materias := lista[j+1].q_materias; {Pega a quantidade de matérias do próximo indice}
+          lista[j].q_materias := lista[j+1].q_materias; {Pega a quantidade de matérias do próximo indice}
           lista[j].codigo := lista[j+1].codigo;
           lista[j].nome := lista[j+1].nome;
           lista[j].sigla_curso := lista[j+1].sigla_curso;
