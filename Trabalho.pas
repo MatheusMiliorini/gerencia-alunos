@@ -94,7 +94,7 @@ begin
   writeln('Lista de alunos vazia!')
   else
   begin
-    for i:=1 to q_cursos do
+    for i:=1 to q_alunos do
     begin
       writeln('Codigo: ',lista[i].codigo);
       writeln('Nome: ',lista[i].nome);
@@ -108,7 +108,7 @@ begin
 end;
 
 procedure RemoverAluno(var lista:alunos_array; var lista_cursos:cursos_array);
-var cod, j : integer;
+var i, cod, j, k : integer;
 sigla_aluno_deletar : string;
 begin
   if q_alunos = 0 then
@@ -121,25 +121,27 @@ begin
     writeln('Zero não é um valor válido para essa operação!')
     else
     begin
-      //Valida se o código não é maior que a quantidade de alunos
-      if cod > q_alunos then
-      writeln('Não há aluno com esse código!')
-      //Termina a validação
-      else
+      for i:=1 to q_alunos do
+      if lista[i].codigo = cod then
       begin
-        sigla_aluno_deletar := lista[cod].sigla_curso;
-        for i:=1 to q_cursos do
-        if lista_cursos[i].sigla = sigla_aluno_deletar then
-        lista_cursos[i].q_alunos := lista_cursos[i].q_alunos-1;
-        for i:=cod to q_alunos do
+        sigla_aluno_deletar := lista[i].sigla_curso;
+        for j:=1 to q_cursos do
         begin
-          lista[i].codigo := lista[i+1].codigo;
-          lista[i].nome := lista[i+1].nome;
-          lista[i].sigla_curso := lista[i+1].sigla_curso;
-          for j:=1 to 5 do
-          lista[i].materias[j] := lista[i+1].materias[j];
-          for j:=1 to 5 do
-          lista[i].medias[j] := lista[i+1].medias[j];
+          if lista_cursos[j].sigla = sigla_aluno_deletar then
+          lista_cursos[j].q_alunos := lista_cursos[j].q_alunos-1;
+        end;
+        for j:=i to q_alunos do
+        begin
+        	lista[j].q_materias := lista[j+1].q_materias; {Pega a quantidade de matérias do próximo indice}
+          lista[j].codigo := lista[j+1].codigo;
+          lista[j].nome := lista[j+1].nome;
+          lista[j].sigla_curso := lista[j+1].sigla_curso;
+          for k:=1 to lista[j+1].q_materias do
+          lista[j].frequencia[k] := lista[j+1].frequencia[k];
+          for k:=1 to lista[j+1].q_materias do
+          lista[j].materias[k] := lista[j+1].materias[k];
+          for k:=1 to lista[j+1].q_materias do
+          lista[j].medias[k] := lista[j+1].medias[k];
         end;
         q_alunos := q_alunos-1;
       end;
