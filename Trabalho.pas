@@ -41,29 +41,29 @@ begin
   writeln('-----------------------');
 end;
 
-procedure CadastrarAluno (var lista:alunos_array;var lista_cursos:cursos_array);
+procedure CadastrarAluno (var lista:alunos_array;var lista_cursos:cursos_array; var qt_alunos : integer; qt_cursos : integer);
 var curso_inserido : string;
 i:integer;
 valido : boolean;
 begin
-  if q_cursos <> 0 then
+  if qt_cursos <> 0 then
   begin
     valido:= false;
-    q_alunos:=q_alunos+1;
+    qt_alunos:=qt_alunos+1;
     v_codigo := v_codigo+1;
-    lista[q_alunos].codigo := v_codigo;
+    lista[qt_alunos].codigo := v_codigo;
     writeln('Nome completo do aluno:');
-    readln(lista[q_alunos].nome);
+    readln(lista[qt_alunos].nome);
     writeln('Sigla do curso:');
     while valido <> true do
     begin
       readln(curso_inserido);
-      for i:=1 to q_cursos do
+      for i:=1 to qt_cursos do
       //Valida o curso
       if curso_inserido = lista_cursos[i].sigla then
       begin
         valido := true;
-        lista[q_alunos].sigla_curso := curso_inserido;
+        lista[qt_alunos].sigla_curso := curso_inserido;
         lista_cursos[i].q_alunos := lista_cursos[i].q_alunos+1;
       end;
       if valido = false then
@@ -71,30 +71,30 @@ begin
       //Fim da validação
     end;
     writeln('Quantidade de matérias do aluno:');
-    readln(lista[q_alunos].q_materias);
+    readln(lista[qt_alunos].q_materias);
     writeln('Insira as matérias com sua média e frequencia em seguida (enter):');
-    for i:=1 to lista[q_alunos].q_materias do
+    for i:=1 to lista[qt_alunos].q_materias do
     begin
       write('Matéria: ');
-      readln(lista[q_alunos].materias[i]);
+      readln(lista[qt_alunos].materias[i]);
       write('Média: ');
-      readln(lista[q_alunos].medias[i]);
+      readln(lista[qt_alunos].medias[i]);
       write('Frequência: ');
-      readln(lista[q_alunos].frequencia[i]);
+      readln(lista[qt_alunos].frequencia[i]);
     end;
   end
   else
   writeln('Ainda não há cursos criados!');
 end;
 
-procedure ListarAlunos(lista:alunos_array;lista_cursos:cursos_array);
+procedure ListarAlunos(lista:alunos_array;lista_cursos:cursos_array; qt_alunos : integer);
 var i, j : integer;
 begin
-  if q_alunos = 0 then
+  if qt_alunos = 0 then
   writeln('Lista de alunos vazia!')
   else
   begin
-    for i:=1 to q_alunos do
+    for i:=1 to qt_alunos do
     begin
       writeln('Codigo: ',lista[i].codigo);
       writeln('Nome: ',lista[i].nome);
@@ -107,11 +107,11 @@ begin
   end;
 end;
 
-procedure RemoverAluno(var lista:alunos_array; var lista_cursos:cursos_array);
+procedure RemoverAluno(var lista:alunos_array; var lista_cursos:cursos_array; var qt_alunos : integer; qt_cursos : integer);
 var i, cod, j, k : integer;
 sigla_aluno_deletar : string;
 begin
-  if q_alunos = 0 then
+  if qt_alunos = 0 then
   writeln('Lista de alunos vazia, não há o que remover!')
   else
   begin
@@ -121,16 +121,16 @@ begin
     writeln('Zero não é um valor válido para essa operação!')
     else
     begin
-      for i:=1 to q_alunos do
+      for i:=1 to qt_alunos do
       if lista[i].codigo = cod then
       begin
         sigla_aluno_deletar := lista[i].sigla_curso;
-        for j:=1 to q_cursos do
+        for j:=1 to qt_cursos do
         begin
           if lista_cursos[j].sigla = sigla_aluno_deletar then
           lista_cursos[j].q_alunos := lista_cursos[j].q_alunos-1;
         end;
-        for j:=i to q_alunos do
+        for j:=i to qt_alunos do
         begin
           lista[j].q_materias := lista[j+1].q_materias; {Pega a quantidade de matérias do próximo indice}
           lista[j].codigo := lista[j+1].codigo;
@@ -143,23 +143,23 @@ begin
           for k:=1 to lista[j+1].q_materias do
           lista[j].medias[k] := lista[j+1].medias[k];
         end;
-        q_alunos := q_alunos-1;
+        qt_alunos := qt_alunos-1;
       end;
     end;
   end;
 end;
 
-procedure CadastrarCurso(var lista:cursos_array);
+procedure CadastrarCurso(var lista:cursos_array; var qt_cursos : integer);
 var trocou, cadastrar : boolean;
 tmp, curso : string;
 i	:	integer;
 begin
   cadastrar := true;
-  q_cursos := q_cursos+1;
+  qt_cursos := qt_cursos+1;
   writeln('Insira a sigla do curso: ');
   readln(curso);
   //Checa se o curso já existe no "banco de dados"
-  for i:=1 to q_cursos do
+  for i:=1 to qt_cursos do
   if lista[i].sigla = curso then
   begin
     cadastrar := false;
@@ -168,14 +168,14 @@ begin
   //Fim da checagem
   if cadastrar = true then
   begin
-    lista[q_cursos].sigla := curso;
+    lista[qt_cursos].sigla := curso;
     writeln('Insira o nome do curso: ');
-    readln(lista[q_cursos].nome);
+    readln(lista[qt_cursos].nome);
     
     //Ordenar
-    if q_cursos > 1 then
+    if qt_cursos > 1 then
     begin
-      i:=q_cursos;
+      i:=qt_cursos;
       trocou := true;
       while (trocou = true) and (i > 1) do
       begin
@@ -195,19 +195,19 @@ begin
     end;
   end
   else
-  q_cursos := q_cursos-1; {Isso está aqui para caso a sigla já esteja cadastrada... Gambiarra talvez?}
+  qt_cursos := qt_cursos-1; {Isso está aqui para caso a sigla já esteja cadastrada... Gambiarra talvez?}
 end;
 
-procedure RemoverCurso (var lista:cursos_array);
+procedure RemoverCurso (var lista:cursos_array; var qt_cursos : integer);
 var n, i : integer;
 begin
-  if q_cursos = 0 then
+  if qt_cursos = 0 then
   writeln('Ainda não há cursos cadastrados!')
   else
   begin
     write('Insira o índice a ser removido: ');
     readln(n);
-    if (n > q_cursos) or (n = 0) then
+    if (n > qt_cursos) or (n = 0) then
     writeln('Índice inválido! Abortando operação...')
     else
     begin
@@ -215,24 +215,24 @@ begin
       writeln('Há alunos nesse curso! Remova todos antes de deletá-lo. Abortando operação...')
       else
       begin
-        for i:=n to q_cursos do
+        for i:=n to qt_cursos do
         begin
           lista[i].sigla := lista[i+1].sigla;
           lista[i].nome := lista[i+1].nome;
         end;
-        q_cursos := q_cursos-1;
+        qt_cursos := qt_cursos-1;
       end;
     end;
   end;
 end;
 
-procedure ListarCursos(lista:cursos_array);
+procedure ListarCursos(lista:cursos_array; qt_cursos : integer);
 var i : integer;
 begin
-  if q_cursos = 0 then
+  if qt_cursos = 0 then
   writeln('Ainda não há cursos cadastrados!')
   else
-  for i:= 1 to q_cursos do
+  for i:= 1 to qt_cursos do
   writeln(i,'. Sigla: ',lista[i].sigla,'   Nome: ',lista[i].nome);
 end;
 
@@ -244,17 +244,17 @@ Begin
     ListarMenu();
     readln(op);
     if (op = 1) then
-    ListarCursos(cursos)
+    ListarCursos(cursos,q_cursos)
     else if (op = 2) then
-    CadastrarCurso(cursos)
+    CadastrarCurso(cursos,q_cursos)
     else if (op = 3) then
-    RemoverCurso(cursos)
+    RemoverCurso(cursos,q_cursos)
     else if (op = 4) then
-    ListarAlunos(alunos,cursos)
+    ListarAlunos(alunos,cursos,q_alunos)
     else if (op = 5) then
-    CadastrarAluno(alunos,cursos)
+    CadastrarAluno(alunos,cursos,q_alunos,q_cursos)
     else if (op = 6) then
-    RemoverAluno(alunos,cursos)
+    RemoverAluno(alunos,cursos,q_alunos,q_cursos)
     else if (op = 0) then
     rodando:=false;
     readkey;
