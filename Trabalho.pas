@@ -41,7 +41,7 @@ begin
   writeln('-----------------------');
 end;
 
-procedure CadastrarAluno (var lista:alunos_array;var lista_cursos:cursos_array; var qt_alunos : integer; qt_cursos : integer);
+procedure CadastrarAluno (var lista:alunos_array;var lista_cursos:cursos_array; var qt_alunos : integer; qt_cursos : integer; var indice_codigo : integer);
 var curso_inserido : string;
 i:integer;
 valido : boolean;
@@ -50,8 +50,8 @@ begin
   begin
     valido:= false;
     qt_alunos:=qt_alunos+1;
-    v_codigo := v_codigo+1;
-    lista[qt_alunos].codigo := v_codigo;
+    indice_codigo := indice_codigo+1;
+    lista[qt_alunos].codigo := indice_codigo;
     writeln('Nome completo do aluno:');
     readln(lista[qt_alunos].nome);
     writeln('Sigla do curso:');
@@ -152,7 +152,7 @@ end;
 procedure CadastrarCurso(var lista:cursos_array; var qt_cursos : integer);
 var trocou, cadastrar : boolean;
 tmp, curso : string;
-i	:	integer;
+i, tmp_q_alunos	:	integer;
 begin
   cadastrar := true;
   qt_cursos := qt_cursos+1;
@@ -182,12 +182,15 @@ begin
         trocou := false;
         if lista[i].sigla < lista[i-1].sigla then
         begin
-          tmp := lista[i].sigla;
+          tmp := lista[i].sigla; //passa a sigla
           lista[i].sigla := lista[i-1].sigla;
           lista[i-1].sigla := tmp;
-          tmp := lista[i].nome;
+          tmp := lista[i].nome; //Passa o nome
           lista[i].nome := lista[i-1].nome;
           lista[i-1].nome := tmp;
+          tmp_q_alunos := lista[i].q_alunos; //Passa a quantidade de alunos (aqui tava o bug!)
+          lista[i].q_alunos := lista[i-1].q_alunos;
+          lista[i-1].q_alunos := tmp_q_alunos;
           i:=i-1;
           trocou := true;
         end;
@@ -195,7 +198,7 @@ begin
     end;
   end
   else
-  qt_cursos := qt_cursos-1; {Isso está aqui para caso a sigla já esteja cadastrada... Gambiarra talvez?}
+  qt_cursos := qt_cursos-1; //Isso está aqui para caso a sigla já esteja cadastrada... Gambiarra talvez?
 end;
 
 procedure RemoverCurso (var lista:cursos_array; var qt_cursos : integer);
@@ -219,6 +222,7 @@ begin
         begin
           lista[i].sigla := lista[i+1].sigla;
           lista[i].nome := lista[i+1].nome;
+          lista[i].q_alunos := lista[i+1].q_alunos; //Aqui também estava dando o bug
         end;
         qt_cursos := qt_cursos-1;
       end;
@@ -252,7 +256,7 @@ Begin
     else if (op = 4) then
     ListarAlunos(alunos,cursos,q_alunos)
     else if (op = 5) then
-    CadastrarAluno(alunos,cursos,q_alunos,q_cursos)
+    CadastrarAluno(alunos,cursos,q_alunos,q_cursos,v_codigo)
     else if (op = 6) then
     RemoverAluno(alunos,cursos,q_alunos,q_cursos)
     else if (op = 0) then
